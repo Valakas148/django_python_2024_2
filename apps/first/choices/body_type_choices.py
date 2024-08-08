@@ -6,4 +6,5 @@ class BodyTypeChoices(models.TextChoices):
     HatchBack = "HatchBack",
     SUV = "SUV",
     Wagon = "Wagon",
-    Coupe = "Coupe"
+    Coupe = "Coupe",
+    Sedan = "Sedan"

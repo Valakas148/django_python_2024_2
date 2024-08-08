@@ -1,7 +1,8 @@
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from core.pagination import PagePagination
@@ -12,11 +13,15 @@ from apps.first.serializer import CarSerializer
 
 
 # Create your views here.
-class CarView(ListCreateAPIView):
+class CarView(ListAPIView):
     serializer_class = CarSerializer
+    # queryset = CarModel.objects.less_than_price(30000).only_brand('Honda')
     queryset = CarModel.objects.all()
     pagination_class = PagePagination
     filterset_class = CarFilter
+    permission_classes = [IsAuthenticated,]
+
+
     # def get(self, request ,*args, **kwargs):
     #     return super().list(request,*args, **kwargs)
     #
