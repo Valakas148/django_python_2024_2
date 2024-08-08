@@ -1,15 +1,12 @@
-from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
+from rest_framework.permissions import AllowAny
 
 from core.pagination import PagePagination
+from core.permissions.is_super_user_permission import IsSuperUserPermission
 
 from apps.first.filter import CarFilter
 from apps.first.models import CarModel
-from apps.first.serializer import CarSerializer
+from apps.first.serializer import CarPhotoSerializer, CarSerializer
 
 
 # Create your views here.
@@ -19,7 +16,7 @@ class CarView(ListAPIView):
     queryset = CarModel.objects.all()
     pagination_class = PagePagination
     filterset_class = CarFilter
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsSuperUserPermission,]
 
 
     # def get(self, request ,*args, **kwargs):
@@ -36,31 +33,13 @@ class CarViewUpdateDelte(RetrieveUpdateDestroyAPIView):
     serializer_class = CarSerializer
     queryset = CarModel.objects.all()
 
-    # def get(self, *args, **kwargs):
-    #
-    #     car = self.get_object()
-    #     serializer = CarSerializer(car)
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-    #
-    #
-    # def put(self, *args, **kwargs):
-    #
-    #     data = self.request.data
-    #     car = self.get_object()
-    #     serializer = CarSerializer(car, data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-    #
-    #
-    # def patch(self, *args, **kwargs):
-    #     data = self.request.data
-    #     car = self.get_object()
-    #     serializer = CarSerializer(car, data, partial=True)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-    #
-    # def delete(self, *args, **kwargs):
-    #     self.get_object().delete()
-    #     return Response('', status=status.HTTP_204_NO_CONTENT)
+class CarAddPhoto(UpdateAPIView):
+    permission_classes = [AllowAny,]
+    serializer_class = CarPhotoSerializer
+    queryset = CarModel.objects.all()
+    http_method_names = ('put',)
+
+    def perform_update(self, serializer):
+        car = self.get_object()
+        car.photo.delete()
+        super().perform_update(serializer)

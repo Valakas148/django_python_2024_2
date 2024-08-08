@@ -1,8 +1,8 @@
-from django.shortcuts import render
-
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from rest_framework.response import Response
+
+from core.permissions.is_admin_or_wr_only import IsAdminOrWrOnly
 
 from apps.autoparks.models import AutoPark
 from apps.autoparks.serializer import AutoParkSerializer
@@ -14,6 +14,7 @@ from apps.first.serializer import CarSerializer
 class AutoParksView(ListCreateAPIView):
     serializer_class = AutoParkSerializer
     queryset = AutoPark.objects.all()
+    permission_classes = [IsAdminOrWrOnly,]
 
 
 class AutoParkAddCarView(GenericAPIView):
