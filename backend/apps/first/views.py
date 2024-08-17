@@ -14,12 +14,15 @@ from apps.first.serializer import CarPhotoSerializer, CarSerializer
 
 # Create your views here.
 class CarView(ListAPIView):
+    """
+    Get all cars
+    """
     serializer_class = CarSerializer
     # queryset = CarModel.objects.less_than_price(30000).only_brand('Honda')
     queryset = CarModel.objects.all()
     pagination_class = PagePagination
     filterset_class = CarFilter
-    permission_classes = [IsSuperUserPermission,]
+    permission_classes = [AllowAny,]
 
 
     # def get(self, request ,*args, **kwargs):
@@ -35,6 +38,7 @@ class CarView(ListAPIView):
 class CarViewUpdateDelte(RetrieveUpdateDestroyAPIView):
     serializer_class = CarSerializer
     queryset = CarModel.objects.all()
+    permission_classes = [AllowAny, ]
 
 class CarAddPhoto(UpdateAPIView):
     permission_classes = [AllowAny,]
