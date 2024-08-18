@@ -46,5 +46,5 @@ services:
       - .env
     restart: on-failure
     command: >
-      sh -c "celery -A config worker -l info -B"
 #      sh -c "celery -A config worker -l info"
+#      sh -c "celery -A config worker -l info -B"
