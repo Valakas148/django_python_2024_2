@@ -1,5 +1,11 @@
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
+from rest_framework.generics import (
+    GenericAPIView,
+    ListAPIView,
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+    UpdateAPIView,
+)
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -13,14 +19,14 @@ from apps.first.serializer import CarPhotoSerializer, CarSerializer
 
 
 # Create your views here.
-class CarView(ListAPIView):
+class CarView(ListCreateAPIView):
     """
     Get all cars
     """
     serializer_class = CarSerializer
     # queryset = CarModel.objects.less_than_price(30000).only_brand('Honda')
     queryset = CarModel.objects.all()
-    pagination_class = PagePagination
+    pagination_class = None
     filterset_class = CarFilter
     permission_classes = [AllowAny,]
 
