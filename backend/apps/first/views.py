@@ -6,7 +6,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     UpdateAPIView,
 )
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from core.pagination import PagePagination
@@ -28,7 +28,7 @@ class CarView(ListCreateAPIView):
     queryset = CarModel.objects.all()
     pagination_class = None
     filterset_class = CarFilter
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticatedOrReadOnly,]
 
 
     # def get(self, request ,*args, **kwargs):
@@ -40,26 +40,26 @@ class CarView(ListCreateAPIView):
     # def get_queryset(self):
     #     return car_filter(self.request.query_params)
 
-
-class CarViewUpdateDelte(RetrieveUpdateDestroyAPIView):
-    serializer_class = CarSerializer
-    queryset = CarModel.objects.all()
-    permission_classes = [AllowAny, ]
-
-class CarAddPhoto(UpdateAPIView):
-    permission_classes = [AllowAny,]
-    serializer_class = CarPhotoSerializer
-    queryset = CarModel.objects.all()
-    http_method_names = ('put',)
-
-    def perform_update(self, serializer):
-        car = self.get_object()
-        car.photo.delete()
-        super().perform_update(serializer)
-
-
-class TestEmail(GenericAPIView):
-    permission_classes = [AllowAny,]
-    def get(self, *args, **kwargs):
-        EmailService.send_test()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#
+# class CarViewUpdateDelte(RetrieveUpdateDestroyAPIView):
+#     serializer_class = CarSerializer
+#     queryset = CarModel.objects.all()
+#     permission_classes = [IsAuthenticated, ]
+#
+# class CarAddPhoto(UpdateAPIView):
+#     permission_classes = [AllowAny,]
+#     serializer_class = CarPhotoSerializer
+#     queryset = CarModel.objects.all()
+#     http_method_names = ('put',)
+#
+#     def perform_update(self, serializer):
+#         car = self.get_object()
+#         car.photo.delete()
+#         super().perform_update(serializer)
+#
+#
+# class TestEmail(GenericAPIView):
+#     permission_classes = [AllowAny,]
+#     def get(self, *args, **kwargs):
+#         EmailService.send_test()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
