@@ -12,22 +12,33 @@ const CarsComponent = () => {
     }, [trigger]);
 
     useEffect(() => {
+        console.log('::::15')
         socketInit().then()
     }, []);
+
     const socketInit = async ()=>{
+        console.log('::::20')
         const {car} = await socketService()
         const client = await car()
-
+        console.log('::::23')
         client.onopen = ()=>{
             console.log("Car Socket Connect")
+            console.log(JSON.stringify({
+                action: 'subscribe_to_car_activity',
+                request_id: new Date().getTime()
+            }))
             client.send(JSON.stringify({
                 action: 'subscribe_to_car_activity',
                 request_id: new Date().getTime()
             }))
         }
         client.onmessage = ()=>{
+            console.log('::::32')
             setTrigger(prev=> !prev)
         }
+        client.onerror = (error) => {
+            console.error("WebSocket error: ", error);
+        };
     }
 
     return (

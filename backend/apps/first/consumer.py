@@ -27,4 +27,4 @@ class CarConsumer(GenericAsyncAPIConsumer):
 
     @action()
     async def subscribe_to_car_activity(self, request_id, **kwargs):
-        await self.cars_activity.subscribe(request_id=request_id)
+        await self.car_activity.subscribe(request_id=request_id)
